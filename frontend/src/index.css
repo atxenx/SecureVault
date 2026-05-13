@@ -1,0 +1,250 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES
+   ═══════════════════════════════════════════════════════════ */
+
+:root,
+[data-theme="dark"] {
+  --sv-page-bg: linear-gradient(160deg, #1a202c 0%, #0f172a 100%);
+  --sv-body-text: #e2e8f0;
+
+  --sv-glass-bg: rgba(30, 41, 59, 0.75);
+  --sv-glass-border: rgba(255, 255, 255, 0.08);
+  --sv-glass-shadow: none;
+
+  --sv-header-bg: rgba(10, 18, 38, 0.92);
+  --sv-header-border: rgba(51, 65, 85, 0.7);
+  --sv-header-shadow: none;
+
+  --sv-ring-track: #1e293b;
+  --sv-bar-track: #0f172a;
+  --sv-activity-sep: rgba(30, 41, 59, 0.6);
+
+  --sv-toggle-bg: #1e293b;
+  --sv-toggle-border: #334155;
+}
+
+[data-theme="light"] {
+  /* ── Page ── */
+  --sv-page-bg: linear-gradient(160deg, #F5F6FA 0%, #ECEEF5 100%);
+  --sv-body-text: #1e293b;
+
+  /* ── Cards / Glass ── */
+  --sv-glass-bg: #FFFFFF;
+  --sv-glass-border: rgba(148, 163, 184, 0.2);
+  --sv-glass-shadow: 0 1px 3px rgba(15,23,42,0.06), 0 4px 16px rgba(15,23,42,0.08);
+
+  /* ── Header ── */
+  --sv-header-bg: rgba(255, 255, 255, 0.98);
+  --sv-header-border: rgba(148, 163, 184, 0.25);
+  --sv-header-shadow: 0 1px 0 rgba(148,163,184,0.25), 0 2px 8px rgba(15,23,42,0.06);
+
+  /* ── Misc ── */
+  --sv-ring-track: #E2E8F0;
+  --sv-bar-track: #E2E8F0;
+  --sv-activity-sep: rgba(148, 163, 184, 0.3);
+
+  --sv-toggle-bg: #F1F5F9;
+  --sv-toggle-border: rgba(100, 116, 139, 0.4);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════ */
+
+*, *::before, *::after {
+  transition-property: background-color, border-color, color, box-shadow, opacity;
+  transition-duration: 180ms;
+  transition-timing-function: ease;
+}
+
+body {
+  color: var(--sv-body-text);
+  background: var(--sv-page-bg);
+  min-height: 100vh;
+}
+
+/* ── Glass utility ── */
+.glass {
+  background: var(--sv-glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--sv-glass-border);
+  box-shadow: var(--sv-glass-shadow);
+}
+
+/* ── Header ── */
+[data-theme="light"] header.glass {
+  background: var(--sv-header-bg) !important;
+  border-color: var(--sv-header-border) !important;
+  box-shadow: var(--sv-header-shadow) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHT MODE — STRUCTURAL OVERRIDES
+   Strategy: override bg/border on containers; let text follow
+   naturally. Only override text colors in neutral containers.
+   NEVER override text-white on colored (blue/emerald/red) bg.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Page wrapper bg ── */
+[data-theme="light"] .min-h-screen.bg-slate-950 {
+  background: var(--sv-page-bg) !important;
+}
+
+/* ── Neutral container backgrounds ── */
+[data-theme="light"] .bg-slate-950  { background-color: #F5F6FA !important; }
+[data-theme="light"] .bg-slate-900  { background-color: #EEF0F8 !important; }
+[data-theme="light"] .bg-slate-800  { background-color: #E2E8F0 !important; }
+[data-theme="light"] .bg-slate-900\/50 { background-color: rgba(238,240,248,0.8) !important; }
+[data-theme="light"] .bg-slate-900\/80 { background-color: rgba(238,240,248,0.95) !important; }
+[data-theme="light"] .bg-slate-900\/0  { background-color: transparent !important; }
+[data-theme="light"] .bg-slate-950\/0  { background-color: transparent !important; }
+
+/* ── Borders ── */
+[data-theme="light"] .border-slate-800     { border-color: #CBD5E1 !important; }
+[data-theme="light"] .border-slate-700     { border-color: #94A3B8 !important; }
+[data-theme="light"] .border-slate-800\/50 { border-color: rgba(203,213,225,0.6) !important; }
+[data-theme="light"] .border-slate-800\/60 { border-color: rgba(203,213,225,0.5) !important; }
+[data-theme="light"] .border-slate-700\/50 { border-color: rgba(148,163,184,0.5) !important; }
+
+/* ── Text — only override slate neutrals (NOT .text-white on colored bg) ── */
+[data-theme="light"] .text-slate-200 { color: #1E293B !important; }
+[data-theme="light"] .text-slate-300 { color: #334155 !important; }
+[data-theme="light"] .text-slate-400 { color: #475569 !important; }
+[data-theme="light"] .text-slate-500 { color: #64748B !important; }
+[data-theme="light"] .text-slate-600 { color: #94A3B8 !important; }
+[data-theme="light"] .text-blue-100  { color: #1D4ED8 !important; }
+
+/* .text-white: neutralize on card/content areas */
+[data-theme="light"] .glass .text-white,
+[data-theme="light"] main .text-white:not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not([class*="bg-orange"]) {
+  color: #0F172A;
+}
+
+/* ── Buttons always keep white text (overrides the rule above) ── */
+[data-theme="light"] button.text-white {
+  color: #FFFFFF !important;
+}
+
+
+/* ── Gradient logo text — saturate in light ── */
+[data-theme="light"] .from-blue-400   { --tw-gradient-from: #2563EB !important; }
+[data-theme="light"] .to-emerald-400  { --tw-gradient-to: #059669 !important; }
+
+/* ── Card icon gradient bg (credential cards) ── */
+[data-theme="light"] .from-slate-800  { --tw-gradient-from: #E2E8F0 !important; }
+[data-theme="light"] .to-slate-900    { --tw-gradient-to: #CBD5E1 !important; }
+
+/* ── Tab nav pill ── */
+[data-theme="light"] nav.hidden.sm\:flex {
+  background-color: #E8ECF5 !important;
+  border-color: #94A3B8 !important;
+}
+
+/* ── Inactive tab text ── */
+[data-theme="light"] nav button:not([class*="bg-gradient"]) {
+  color: #475569 !important;
+}
+[data-theme="light"] nav button:not([class*="bg-gradient"]):hover {
+  background-color: #D8DFF0 !important;
+  color: #1E293B !important;
+}
+
+/* ── Hover utility overrides ── */
+[data-theme="light"] .hover\:bg-slate-800:hover   { background-color: #E2E8F0 !important; }
+[data-theme="light"] .hover\:border-slate-700:hover { border-color: #64748B !important; }
+[data-theme="light"] .hover\:text-white:hover       { color: #0F172A !important; }
+[data-theme="light"] .hover\:text-slate-200:hover   { color: #1E293B !important; }
+
+/* ── Inputs & textareas ──
+   Use high-specificity selectors to beat .bg-slate-900 override */
+[data-theme="light"] input[type="text"],
+[data-theme="light"] input[type="email"],
+[data-theme="light"] input[type="password"],
+[data-theme="light"] textarea {
+  background-color: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+/* Beat .bg-slate-900 class specificity on form elements */
+[data-theme="light"] input.bg-slate-900,
+[data-theme="light"] textarea.bg-slate-900,
+[data-theme="light"] input.bg-slate-900\/50,
+[data-theme="light"] textarea.bg-slate-900\/50 {
+  background-color: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+/* Focus state */
+[data-theme="light"] input:focus,
+[data-theme="light"] textarea:focus {
+  border-color: #3B82F6 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12) !important;
+}
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: #94A3B8 !important;
+}
+
+/* ── Form icon colors (left-side icons in inputs) ── */
+[data-theme="light"] form .text-slate-500,
+[data-theme="light"] form .text-slate-400 {
+  color: #64748B !important;
+}
+
+/* ── Form labels ── */
+[data-theme="light"] form label,
+[data-theme="light"] form .text-xs.font-medium.text-slate-400 {
+  color: #374151 !important;
+}
+
+/* ── "Generate Strong" link ── */
+[data-theme="light"] .text-blue-400 { color: #2563EB !important; }
+[data-theme="light"] .hover\:text-blue-300:hover { color: #1D4ED8 !important; }
+
+/* ── Form card (AddCredentialForm glass wrapper) ── */
+[data-theme="light"] form + div,
+[data-theme="light"] .glass form {
+  color: #1E293B;
+}
+
+
+/* ── Score ring track ── */
+[data-theme="light"] circle[stroke="#1e293b"] {
+  stroke: var(--sv-ring-track) !important;
+}
+
+/* ── Strength bar track ── */
+[data-theme="light"] .bg-slate-900.rounded-full {
+  background-color: var(--sv-bar-track) !important;
+}
+
+/* ── Activity separator ── */
+[data-theme="light"] .border-slate-800\/60 {
+  border-color: var(--sv-activity-sep) !important;
+}
+
+/* ── Accent icon backgrounds — slightly more vivid ── */
+[data-theme="light"] .bg-blue-500\/10    { background-color: rgba(37,99,235,0.10) !important; }
+[data-theme="light"] .bg-red-500\/10     { background-color: rgba(220,38,38,0.10) !important; }
+[data-theme="light"] .bg-orange-500\/10  { background-color: rgba(234,88,12,0.10) !important; }
+[data-theme="light"] .bg-emerald-500\/10 { background-color: rgba(16,185,129,0.10) !important; }
+
+/* ── Info/warning banners — more visible tint ── */
+[data-theme="light"] .bg-emerald-500\/5  { background-color: rgba(16,185,129,0.09) !important; }
+[data-theme="light"] .bg-blue-500\/5     { background-color: rgba(37,99,235,0.08) !important; }
+[data-theme="light"] .bg-orange-500\/5   { background-color: rgba(234,88,12,0.09) !important; }
+[data-theme="light"] .bg-red-500\/5      { background-color: rgba(220,38,38,0.09) !important; }
+
+/* ── Refresh / secondary action button ── */
+[data-theme="light"] .bg-slate-800.hover\:bg-slate-700,
+[data-theme="light"] button.bg-slate-800 {
+  background-color: #E2E8F0 !important;
+  border-color: #94A3B8 !important;
+  color: #334155 !important;
+}
+
+
