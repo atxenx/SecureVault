@@ -8,6 +8,37 @@
 
 ---
 
+## Abstract
+Poor password hygiene, including weak and reused passwords, is a leading cause of account compromise. SecureVault is a cryptographically secure password manager designed to mitigate these risks. By leveraging a robust hybrid cryptographic architecture—combining AES-256-GCM for data confidentiality and integrity, RSA-2048-OAEP for key wrapping, and PBKDF2 for secure key derivation—SecureVault ensures that user credentials remain inaccessible even in the event of a total database breach. Furthermore, the system introduces a real-time Security Dashboard that performs local analytics to identify and alert users of reused or weak passwords, thereby actively improving their security posture.
+
+---
+
+## Contents
+**Abstract** . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . i
+
+**Contents** . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . i
+
+**List of Figures** . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ii
+1 System Context Diagram . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+2 System Component Architecture . . . . . . . . . . . . . . . . . . . . . . 4
+
+**1 Project Concept** . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+1.1 Project summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+1.2 Typical Usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+1.3 Main Challenges . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+
+**2 Project requirements** . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+2.1 System description . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+2.2 Computational tasks . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+2.3 Use cases and tests . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+
+**3 Algorithm design and Implementation** . . . . . . . . . . . . . . . 5
+3.1 Algorithm design . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+3.2 Implementation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+
+---
+
+
 # Chapter 1: Project Concept
 SecureVault is a software system for securing user credentials. It provides a highly secure password management facility combined with a real-time security posture dashboard to prevent password reuse and weak passwords.
 
