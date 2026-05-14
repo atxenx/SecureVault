@@ -38,6 +38,8 @@ Poor password hygiene, including weak and reused passwords, is a leading cause o
 
 **Appendix A Computing Password Entropy** . . . . . . . . . . . 6
 
+**Appendix B Vault Security Analytics** . . . . . . . . . . . . . . 7
+
 ---
 
 
@@ -197,4 +199,54 @@ function crackTimeLabel(entropy) {
 // tests:
 // console.log("Entropy for 'test':", entropyBits("test"));
 // console.log("Crack time for 'test':", crackTimeLabel(entropyBits("test")));
+```
+
+---
+
+# Appendix B: Vault Security Analytics
+
+The following Python implementation demonstrates the backend algorithm used to analyze the user's entire decrypted vault in-memory. It computes the aggregate security score and detects reused passwords across multiple accounts without saving plaintext passwords to the server.
+
+```python
+from collections import Counter
+
+def analyze_passwords(passwords: list) -> dict:
+    # 1. Reuse Detection (In-Memory Only)
+    # Count occurrences of each password to find duplicates
+    counts = Counter(passwords)           
+    reused_set = {p for p, c in counts.items() if c > 1}
+    reused_count = sum(1 for p in passwords if p in reused_set)
+
+    # 2. Strength Aggregation
+    weak = medium = strong = very_strong = 0
+    for p in passwords:
+        # _classify_strength returns a score from 0 to 4
+        s = _classify_strength(p)['score']
+        if s <= 1: weak += 1
+        elif s == 2: medium += 1
+        elif s == 3: strong += 1
+        else: very_strong += 1
+
+    # 3. Overall Security Score Calculation
+    total = len(passwords)
+    deduction = 0
+    if total > 0:
+        # Penalize heavily for weak passwords (up to -50 pts)
+        deduction += (weak / total) * 50          
+        # Penalize for password reuse (up to -30 pts)
+        deduction += (reused_count / total) * 30  
+        # Minor penalty if the majority of passwords are just "Medium"
+        if medium / total > 0.5: deduction += 10  
+
+    # Calculate final score (0 - 100)
+    score = max(0, min(100, round(100 - deduction)))
+
+    return {
+        'weak': weak,
+        'medium': medium,
+        'strong': strong,
+        'very_strong': very_strong,
+        'reused': reused_count,
+        'security_score': score
+    }
 ```
