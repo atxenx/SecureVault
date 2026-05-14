@@ -36,6 +36,8 @@ Poor password hygiene, including weak and reused passwords, is a leading cause o
 3.1 Algorithm design . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
 3.2 Implementation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
 
+**Appendix A Computing Password Entropy** . . . . . . . . . . . 6
+
 ---
 
 
@@ -146,4 +148,53 @@ def rsa_encrypt(public_key_pem: bytes, aes_key: bytes) -> bytes:
     cipher_rsa = PKCS1_OAEP.new(rsa_key)
     # Encrypt the 256-bit AES session key using RSA
     return cipher_rsa.encrypt(aes_key)
+```
+
+---
+
+# Appendix A: Computing Password Entropy
+
+The following Javascript implementation demonstrates how SecureVault locally calculates password entropy (in bits) and estimates the time required to crack the password based on an attacker computing 10 billion guesses per second. This algorithm powers the real-time Security Dashboard.
+
+```javascript
+// Purpose: To compute password entropy and estimate crack time efficiently
+// where: password is a string
+// Example: entropyBits("P@ssword123") returns ~65.6 bits
+
+function entropyBits(password) {
+  let pool = 0;
+  if (/[a-z]/.test(password)) pool += 26;
+  if (/[A-Z]/.test(password)) pool += 26;
+  if (/[0-9]/.test(password)) pool += 10;
+  if (/[^a-zA-Z0-9]/.test(password)) pool += 32;
+  
+  if (pool === 0) return 0;
+  
+  // Calculate entropy: E = L * log2(R)
+  // L = password length, R = pool size
+  return Math.log2(pool) * password.length;
+}
+
+function crackTimeLabel(entropy) {
+  // Total possible combinations based on calculated entropy
+  const guesses = Math.pow(2, entropy);
+  
+  // Assume a modern cracking rig capable of 10 Billion guesses/sec
+  const gps = 10000000000; 
+  const seconds = guesses / gps;
+  
+  if (seconds < 1)          return 'Instantly';
+  if (seconds < 60)         return `${Math.round(seconds)} seconds`;
+  if (seconds < 3600)       return `${Math.round(seconds / 60)} minutes`;
+  if (seconds < 86400)      return `${Math.round(seconds / 3600)} hours`;
+  if (seconds < 2592000)    return `${Math.round(seconds / 86400)} days`;
+  if (seconds < 31536000)   return `${Math.round(seconds / 2592000)} months`;
+  if (seconds < 3153600000) return `${Math.round(seconds / 31536000)} years`;
+  
+  return 'Centuries';
+}
+
+// tests:
+// console.log("Entropy for 'test':", entropyBits("test"));
+// console.log("Crack time for 'test':", crackTimeLabel(entropyBits("test")));
 ```
